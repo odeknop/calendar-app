@@ -1,0 +1,27 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="buttonStyle">@style/buttonStyle</item>
+        <item name="actionMenuTextColor">@color/primary</item>
+
+    </style>
+
+    <style name="buttonStyle" parent="Widget.AppCompat.Button.Borderless.Colored">
+
+    </style>
+
+    <style name="actionBarStyle">
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
+</resources>

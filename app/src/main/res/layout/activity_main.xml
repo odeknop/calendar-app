@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.ode.sunrisechallenge.activity.MainActivity">
+
+    <include android:id="@+id/toolbar" layout="@layout/toolbar_default"/>
+
+    <com.ode.sunrisechallenge.view.SunriseView
+        android:id="@+id/sunrise_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.ode.sunrisechallenge.view.SunriseView"/>
+
+</LinearLayout>

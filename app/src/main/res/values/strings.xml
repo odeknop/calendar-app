@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">SunriseChallenge</string>
+    <string name="title_activity_main">SunriseChallenge</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- extended day view -->
+    <string name="all_day">ALL DAY</string>
+    <string name="time_sample">3h</string>
+    <string name="no_event">No Event</string>
+
+</resources>

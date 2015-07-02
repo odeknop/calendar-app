@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#f5f5f5</color>
+    <color name="primary_dark">#02ff4f</color>
+    <color name="accent">#de0f8e</color>
+    <color name="actionBar_text_color">#000</color>
+
+    <!-- DayView -->
+    <color name="day_view_border">#e4e4e4</color>
+    <color name="day_view_background">#ffffff</color>
+    <color name="day_view_past_background">#f8f8f8</color>
+    <color name="day_view_selected">#2789e4</color>
+    
+    <!-- day view extended -->
+    <color name="day_view_extended_header_background">#f5f5f5</color>
+    <color name="day_view_extended_header_text">#8e8e93</color>
+    <color name="day_view_extended_header_border">#e1e1e1</color>
+
+    <color name="red">#ff0202</color>
+    <color name="blue">#2789e4</color>
+
+    <color name="white">#fff</color>
+    <color name="calendar_background_color">#fff</color>
+
+    <color name="calendar_header_background_color">#f5f5f5</color>
+
+    <color name="sunrise">#fa565a</color>
+
+</resources>

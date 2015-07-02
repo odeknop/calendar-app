@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item>
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/day_view_extended_header_border"></solid>
+        </shape>
+    </item>
+
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/calendar_header_background_color"></solid>
+        </shape>
+    </item>
+
+</layer-list>
