@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-                  android:orientation="horizontal"
-                  android:layout_width="match_parent"
-                  android:layout_height="60dp"
-                  android:gravity="center_vertical"
-                  android:background="#f0ba87"
-                  android:padding="10dp">
+    android:layout_height="@dimen/day_view_extended_min_height">
 
         <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/day_view_all_day"
-            />
+            android:layout_alignParentLeft="false"/>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/day_view_extended_min_height"
+            android:id="@+id/icon"
             android:src="@mipmap/ic_launcher"
-            android:padding="6dp"/>
+            android:padding="6dp"
+            android:layout_alignParentTop="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/event_title"/>
+            android:text="Large Text Large TextLarge Text "
+            android:id="@+id/event_title"
+            android:singleLine="false"
+            android:elegantTextHeight="false"
+            android:textSize="@dimen/event_title_font_size"
+            android:textColor="#000000"
+            android:layout_toEndOf="@id/icon"/>
 
-    </LinearLayout>
 
 </RelativeLayout>

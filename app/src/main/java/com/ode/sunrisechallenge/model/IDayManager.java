@@ -5,6 +5,6 @@ package com.ode.sunrisechallenge.model;
  */
 public interface IDayManager {
 
-    public IDay[] getDays();
-
+    IDay[] getDays();
+    int getIndexOfToday();
 }

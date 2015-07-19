@@ -55,14 +55,4 @@ public class Day implements IDay {
         return mYear;
     }
 
-    @Override
-    public boolean hasEvents() {
-        return false;
-    }
-
-    @Override
-    public IEvent[] getEvents() {
-        return new IEvent[0];
-    }
-
 }

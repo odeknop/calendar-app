@@ -1,17 +1,21 @@
 package com.ode.sunrisechallenge.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ode.sunrisechallenge.R;
+import com.ode.sunrisechallenge.model.IData;
 import com.ode.sunrisechallenge.model.IDay;
+import com.ode.sunrisechallenge.model.IEvent;
+import com.ode.sunrisechallenge.model.IEventManager;
 import com.ode.sunrisechallenge.model.impl.DayManager;
 import com.ode.sunrisechallenge.model.utils.TimeUtils;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.ode.sunrisechallenge.recycler.RecyclerView;
+import com.ode.sunrisechallenge.recycler.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 /**
  * Created by ode on 26/06/15.
@@ -20,11 +24,20 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
 
     public static final String TAG = AgendaViewAdapter.class.getName();
 
-    private Context mContext;
+    private final IEventManager mEventManager;
     private IDay[] mDays = DayManager.getInstance().getDays();
 
-    public AgendaViewAdapter(Context context) {
-        mContext = context;
+    public static final int NO_EVENT = 0;
+    public static final int HAS_EVENTS = 1;
+
+    public AgendaViewAdapter(IEventManager eventManager) {
+        mEventManager = eventManager;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        recyclerView.scrollToPosition(DayManager.getInstance().getIndexOfToday());
     }
 
     @Override
@@ -35,9 +48,13 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
 
     @Override
     public void onBindViewHolder(DayViewHolder holder, int position) {
-        if(holder.getItemViewType() == DayType.HAS_EVENTS) {
-            // TODO bind event to day
+
+        IDay day = getItem(position);
+        if(holder.getItemViewType() == HAS_EVENTS) {
+            IEvent[] events = mEventManager.getEvents(day);
+            holder.bind(events[0]);
         }
+        holder.itemView.setTag(position);
     }
 
     @Override
@@ -70,7 +87,7 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).hasEvents() ? DayType.HAS_EVENTS : DayType.NO_EVENT;
+        return mEventManager.hasEvents(getItem(position)) ? HAS_EVENTS : NO_EVENT;
     }
 
     private IDay getItem(int position) {
@@ -79,9 +96,9 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
 
     private View createViewFor(int viewType, ViewGroup parent) {
         switch (viewType) {
-            case DayType.NO_EVENT:
+            case NO_EVENT:
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view_no_event, parent, false);
-            case DayType.HAS_EVENTS:
+            case HAS_EVENTS:
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view, parent, false);
         }
         return null;

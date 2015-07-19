@@ -1,21 +1,18 @@
 package com.ode.sunrisechallenge.model;
 
-import android.os.Parcelable;
-
-import com.ode.sunrisechallenge.model.impl.Location;
-
-
 /**
  * Created by ode on 26/06/15.
  */
-public interface IEvent extends Comparable<IEvent>, Parcelable {
+public interface IEvent extends Comparable<IEvent> {
 
     long getId();
     String getTitle();
     String getDescription();
     boolean isAllDayEvent();
     ITimeRange getTime();
-    Location getLocation();
+    String getLocation();
     IEvent[] EMPTY_ARR = new IEvent[0];
-
+    IAccount getOwnerAccount();
+    long getAccountType();
+    String getAccountEventId();
 }

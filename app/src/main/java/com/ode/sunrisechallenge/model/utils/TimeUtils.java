@@ -1,13 +1,23 @@
 package com.ode.sunrisechallenge.model.utils;
 
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.ode.sunrisechallenge.model.IDay;
+import com.ode.sunrisechallenge.model.ITimeRange;
+import com.ode.sunrisechallenge.model.impl.TimeRange;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 /**
  * Created by ode on 26/06/15.
  */
 public class TimeUtils {
+
+    private static final LocalTime startTime = new LocalTime(0, 0); //00H00 AM
+    private static final LocalTime endTime = new LocalTime(23, 0); //24H00 AM
 
     public static String getDateAsText(int dayOfWeek, int monthOfYear, int year, int dayOfYear) {
         DateTime date = new DateTime();
@@ -27,5 +37,36 @@ public class TimeUtils {
 
     public static DateTime fromDBTime(long time) {
         return new DateTime(time * 1000L, DateTimeZone.UTC);
+    }
+
+    public static boolean equals(ITimeRange timeRange, ITimeRange otherTimeRange) {
+        return timeRange.getStartTime().equals(otherTimeRange.getStartTime())
+                && timeRange.getEndTime().equals(otherTimeRange.getEndTime());
+    }
+
+    public static DateTime combine(LocalDate date, LocalTime time) {
+        return new DateTime(
+                date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
+                time.getHourOfDay(), time.getMinuteOfHour()
+        ).toDateTime(DateTimeZone.UTC);
+    }
+
+    public static ITimeRange startOfDayRange(LocalDate dt) {
+        DateTime from = combine(dt, startTime);
+        DateTime to = combine(dt.plusDays(1), startTime);
+        return new TimeRange(from, to);
+    }
+
+    public static ITimeRange getDayRange(IDay day) {
+        LocalDate date = new LocalDate(day.getYear(), day.getMonthOfYear(), day.getDay());
+        return startOfDayRange(date);
+    }
+
+    public static ITimeRange getTimeRange(Event event) {
+        if(event.getStart().getDateTime() == null || event.getEnd().getDateTime() == null) return null;
+        EventDateTime start = event.getStart();
+        EventDateTime end = event.getEnd();
+        return new TimeRange(new DateTime(start.getDateTime().getValue(), DateTimeZone.forID(start.getTimeZone())),
+                new DateTime(end.getDateTime().getValue(), DateTimeZone.forID(end.getTimeZone())));
     }
 }

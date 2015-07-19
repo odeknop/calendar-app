@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#f5f5f5</color>
-    <color name="primary_dark">#02ff4f</color>
-    <color name="accent">#de0f8e</color>
+    <color name="primary_dark">#8e8e93</color>
+    <color name="accent">#2789e4</color>
     <color name="actionBar_text_color">#000</color>
 
     <!-- DayView -->
@@ -25,5 +25,9 @@
     <color name="calendar_header_background_color">#f5f5f5</color>
 
     <color name="sunrise">#fa565a</color>
+
+
+    <!-- LoginActivity -->
+    <color name="google_connect_background">#df4a32</color>
 
 </resources>

@@ -2,8 +2,6 @@ package com.ode.sunrisechallenge.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,8 @@ import com.ode.sunrisechallenge.fragment.CalendarViewFragment;
 import com.ode.sunrisechallenge.model.IDay;
 import com.ode.sunrisechallenge.model.impl.DayManager;
 import com.ode.sunrisechallenge.model.utils.TimeUtils;
+import com.ode.sunrisechallenge.recycler.GridLayoutManager;
+import com.ode.sunrisechallenge.recycler.RecyclerView;
 
 import org.joda.time.DateTime;
 
@@ -28,19 +28,15 @@ public class CalendarViewAdapter extends RecyclerView.Adapter<CalendarViewAdapte
     private IDay[] mDays = DayManager.getInstance().getDays();
     private int mSelectedItem = -1;
     private int mSunriseColor;
-    private RecyclerView.LayoutManager mLayoutManager;
     private int mCurrentYear = DateTime.now().getYear();
     private CalendarViewFragment.OnDaySelectedListener mCallback;
+
+    public static final int FIRST_OF_MONTH = 2;
+    public static final int REGULAR_DAY = 3;
 
     public CalendarViewAdapter(Context context, CalendarViewFragment.OnDaySelectedListener callback) {
         mCallback = callback;
         mSunriseColor = context.getResources().getColor(R.color.sunrise);
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mLayoutManager = recyclerView.getLayoutManager();
     }
 
     @Override
@@ -52,7 +48,7 @@ public class CalendarViewAdapter extends RecyclerView.Adapter<CalendarViewAdapte
         if(mSelectedItem == position) {
             holder.itemView.setSelected(true);
             holder.mDayText.setTextColor(Color.WHITE);
-        } else if(holder.getItemViewType() == DayType.FIRST_OF_MONTH) {
+        } else if(holder.getItemViewType() == FIRST_OF_MONTH) {
             holder.mDayText.setTextColor(mSunriseColor);
             holder.mMonthName.setTextColor(mSunriseColor);
             holder.mYear.setTextColor(mSunriseColor);
@@ -76,21 +72,20 @@ public class CalendarViewAdapter extends RecyclerView.Adapter<CalendarViewAdapte
         GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) v.getLayoutParams();
         layoutParams.height = Sunrise.ROW_HEIGHT;
         v.setLayoutParams(layoutParams);
-        ViewHolder dv = new ViewHolder(v);
-        return dv;
+        return new ViewHolder(v);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).getDay() == 1 && mSelectedItem != position ? DayType.FIRST_OF_MONTH : DayType.REGULAR_DAY;
+        return getItem(position).getDay() == 1 && mSelectedItem != position ? FIRST_OF_MONTH : REGULAR_DAY;
     }
 
     private View createViewFor(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case DayType.REGULAR_DAY: {
+            case REGULAR_DAY: {
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_day_view_default, parent, false);
             }
-            case DayType.FIRST_OF_MONTH: {
+            case FIRST_OF_MONTH: {
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.calendar_day_view_year, parent, false);
             }
         }
@@ -139,6 +134,5 @@ public class CalendarViewAdapter extends RecyclerView.Adapter<CalendarViewAdapte
         notifyItemChanged(mSelectedItem);
         mSelectedItem = selected;
         notifyItemChanged(mSelectedItem);
-        mLayoutManager.scrollToPosition(selected);
     }
 }

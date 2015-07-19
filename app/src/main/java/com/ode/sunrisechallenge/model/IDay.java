@@ -10,6 +10,4 @@ public interface IDay {
     int getDayOfWeek();
     int getMonthOfYear();
     int getYear();
-    boolean hasEvents();
-    IEvent[] getEvents();
 }

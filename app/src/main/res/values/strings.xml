@@ -11,5 +11,6 @@
     <string name="all_day">ALL DAY</string>
     <string name="time_sample">3h</string>
     <string name="no_event">No Event</string>
+    <string name="connect_with_google">Connect With Google</string>
 
 </resources>

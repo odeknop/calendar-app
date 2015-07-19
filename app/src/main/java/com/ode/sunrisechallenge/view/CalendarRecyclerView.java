@@ -1,8 +1,9 @@
 package com.ode.sunrisechallenge.view;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+
+import com.ode.sunrisechallenge.recycler.RecyclerView;
 
 /**
  * Created by ode on 01/07/15.

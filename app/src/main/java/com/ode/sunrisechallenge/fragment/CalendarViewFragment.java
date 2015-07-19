@@ -7,8 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,10 @@ import android.view.ViewGroup;
 import com.ode.sunrisechallenge.R;
 import com.ode.sunrisechallenge.Sunrise;
 import com.ode.sunrisechallenge.adapter.CalendarViewAdapter;
+import com.ode.sunrisechallenge.model.IDayManager;
+import com.ode.sunrisechallenge.model.impl.DayManager;
+import com.ode.sunrisechallenge.recycler.GridLayoutManager;
+import com.ode.sunrisechallenge.recycler.RecyclerView;
 import com.ode.sunrisechallenge.view.CalendarRecyclerView;
 
 public class CalendarViewFragment extends Fragment {
@@ -32,7 +34,7 @@ public class CalendarViewFragment extends Fragment {
     }
 
     public interface OnDaySelectedListener {
-        public void onDaySelected(int position);
+        void onDaySelected(int position);
     }
 
     public CalendarViewFragment() {
@@ -69,13 +71,15 @@ public class CalendarViewFragment extends Fragment {
         mRecyclerView.setLayoutManager(mGridLayoutManager = new GridLayoutManager(getActivity(), Sunrise.DAYS_IN_A_WEEK));
         mRecyclerView.addItemDecoration(new DayViewItemDecoration(getActivity()));
         mRecyclerView.setAdapter(mCalendarViewAdapter = new CalendarViewAdapter(view.getContext(), mCallback));
+        mRecyclerView.getLayoutManager().scrollToPosition(50);
     }
 
     public void setSelected(int position, boolean scrolling) {
         if(mCalendarViewAdapter.getSelectedItem() != position && scrolling) {
             if(position > mGridLayoutManager.findLastCompletelyVisibleItemPosition() ||
-                    position < mGridLayoutManager.findFirstCompletelyVisibleItemPosition())
-                mGridLayoutManager.scrollToPositionWithOffset(position, 0);
+                    position < mGridLayoutManager.findFirstCompletelyVisibleItemPosition()) {
+                mRecyclerView.scrollToPosition(position);
+            }
             mCalendarViewAdapter.setSelected(position);
         }
     }
