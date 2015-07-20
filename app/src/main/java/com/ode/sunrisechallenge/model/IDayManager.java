@@ -7,4 +7,7 @@ public interface IDayManager {
 
     IDay[] getDays();
     int getIndexOfToday();
+    boolean isTomorrow(IDay day);
+    boolean isToday(IDay day);
+    boolean isYesterday(IDay day);
 }

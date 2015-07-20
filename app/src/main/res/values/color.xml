@@ -10,6 +10,7 @@
     <color name="day_view_background">#ffffff</color>
     <color name="day_view_past_background">#f8f8f8</color>
     <color name="day_view_selected">#2789e4</color>
+    <color name="current_day_highlight">#2789e4</color>
     
     <!-- day view extended -->
     <color name="day_view_extended_header_background">#f5f5f5</color>

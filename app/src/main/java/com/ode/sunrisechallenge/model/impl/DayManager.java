@@ -21,6 +21,9 @@ public class DayManager implements IDayManager {
 
     private static IDayManager instance;
     private int mIndexOfToday;
+    private IDay mYesterday;
+    private IDay mToday;
+    private IDay mTomorrow;
 
     public static IDayManager getInstance() {
         if(instance == null) {
@@ -49,6 +52,9 @@ public class DayManager implements IDayManager {
             DateTime dt = s.withFieldAdded(DurationFieldType.days(), i);
             if(dt.toLocalDate().equals(DateTime.now().toLocalDate())) {
                 mIndexOfToday = i;
+                mYesterday = new Day(dt.minusDays(1));
+                mToday = new Day(dt);
+                mTomorrow = new Day(dt.plusDays(1));
             }
             dates.add(new Day(dt));
         }
@@ -63,5 +69,20 @@ public class DayManager implements IDayManager {
     @Override
     public int getIndexOfToday() {
         return mIndexOfToday;
+    }
+
+    @Override
+    public boolean isTomorrow(IDay day) {
+        return day.equals(mTomorrow);
+    }
+
+    @Override
+    public boolean isToday(IDay day) {
+        return day.equals(mToday);
+    }
+
+    @Override
+    public boolean isYesterday(IDay day) {
+        return day.equals(mYesterday);
     }
 }

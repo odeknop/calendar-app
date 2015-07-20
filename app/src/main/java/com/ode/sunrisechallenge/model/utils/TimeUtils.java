@@ -8,16 +8,29 @@ import com.ode.sunrisechallenge.model.impl.TimeRange;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 /**
  * Created by ode on 26/06/15.
  */
 public class TimeUtils {
 
-    private static final LocalTime startTime = new LocalTime(0, 0); //00H00 AM
-    private static final LocalTime endTime = new LocalTime(23, 0); //24H00 AM
+    private static final LocalTime mStartTime = new LocalTime(0, 0); //00H00 AM
+    private static final LocalTime mEndTime = new LocalTime(23, 0); //24H00 AM
+
+    private static final PeriodFormatter mPeriodFormatter = new PeriodFormatterBuilder()
+            .appendDays()
+            .appendSuffix("d")
+            .appendHours()
+            .appendSuffix("h")
+            .appendMinutes()
+            .appendSuffix("m")
+            .toFormatter();
 
     public static String getDateAsText(int dayOfWeek, int monthOfYear, int year, int dayOfYear) {
         DateTime date = new DateTime();
@@ -52,8 +65,8 @@ public class TimeUtils {
     }
 
     public static ITimeRange startOfDayRange(LocalDate dt) {
-        DateTime from = combine(dt, startTime);
-        DateTime to = combine(dt.plusDays(1), startTime);
+        DateTime from = combine(dt, mStartTime);
+        DateTime to = combine(dt.plusDays(1), mStartTime);
         return new TimeRange(from, to);
     }
 
@@ -68,5 +81,10 @@ public class TimeUtils {
         EventDateTime end = event.getEnd();
         return new TimeRange(new DateTime(start.getDateTime().getValue(), DateTimeZone.forID(start.getTimeZone())),
                 new DateTime(end.getDateTime().getValue(), DateTimeZone.forID(end.getTimeZone())));
+    }
+
+    public static String getDurationAsString(Duration duration) {
+        Period p = duration.toPeriod();
+        return p.toString(mPeriodFormatter);
     }
 }

@@ -12,5 +12,8 @@
     <string name="time_sample">3h</string>
     <string name="no_event">No Event</string>
     <string name="connect_with_google">Connect With Google</string>
+    <string name="today">today</string>
+    <string name="yesterday">yesterday</string>
+    <string name="tomorrow">tomorrow</string>
 
 </resources>

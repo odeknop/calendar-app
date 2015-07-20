@@ -55,4 +55,9 @@ public class Day implements IDay {
         return mYear;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        Day d = (Day) o;
+        return d.getId() == getId();
+    }
 }

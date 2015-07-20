@@ -76,7 +76,7 @@ public class AgendaViewFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mAgendaViewAdapter = new AgendaViewAdapter(mAccount.getEventManager()));
+        mRecyclerView.setAdapter(mAgendaViewAdapter = new AgendaViewAdapter(getActivity(), mAccount.getEventManager()));
         final StickyRecyclerHeadersDecoration headersDecoration = new StickyRecyclerHeadersDecoration(mAgendaViewAdapter);
         mRecyclerView.addItemDecoration(headersDecoration);
 

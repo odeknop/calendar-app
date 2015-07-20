@@ -1,21 +1,21 @@
 package com.ode.sunrisechallenge.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ode.sunrisechallenge.R;
-import com.ode.sunrisechallenge.model.IData;
 import com.ode.sunrisechallenge.model.IDay;
+import com.ode.sunrisechallenge.model.IDayManager;
 import com.ode.sunrisechallenge.model.IEvent;
 import com.ode.sunrisechallenge.model.IEventManager;
 import com.ode.sunrisechallenge.model.impl.DayManager;
 import com.ode.sunrisechallenge.model.utils.TimeUtils;
 import com.ode.sunrisechallenge.recycler.RecyclerView;
 import com.ode.sunrisechallenge.recycler.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.ode.sunrisechallenge.view.DayView;
 
 /**
  * Created by ode on 26/06/15.
@@ -25,13 +25,26 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
     public static final String TAG = AgendaViewAdapter.class.getName();
 
     private final IEventManager mEventManager;
-    private IDay[] mDays = DayManager.getInstance().getDays();
+    private final IDayManager mDayManager = DayManager.getInstance();
+    private IDay[] mDays = mDayManager.getDays();
 
     public static final int NO_EVENT = 0;
     public static final int HAS_EVENTS = 1;
 
-    public AgendaViewAdapter(IEventManager eventManager) {
+    private final int mCurrentDayColor;
+    private final int mDefaultDayColor;
+    private final String mTodayText;
+    private final String mTomorrowText;
+    private final String mYesterdayText;
+
+    public AgendaViewAdapter(Context context, IEventManager eventManager) {
         mEventManager = eventManager;
+
+        mCurrentDayColor = context.getResources().getColor(R.color.current_day_highlight);
+        mDefaultDayColor = context.getResources().getColor(R.color.day_view_extended_header_text);
+        mTodayText = context.getResources().getString(R.string.today);
+        mYesterdayText = context.getResources().getString(R.string.yesterday);
+        mTomorrowText = context.getResources().getString(R.string.tomorrow);
     }
 
     @Override
@@ -71,7 +84,20 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         TextView textView = (TextView) viewHolder.itemView;
         IDay day = getItem(position);
-        textView.setText(TimeUtils.getDateAsText(day.getDayOfWeek(), day.getMonthOfYear(), day.getYear(), day.getDay()));
+        String date = TimeUtils.getDateAsText(day.getDayOfWeek(), day.getMonthOfYear(), day.getYear(), day.getDay());
+
+        if(mDayManager.isToday(day)) {
+            textView.setTextColor(mCurrentDayColor);
+            date = mTodayText.toUpperCase() + " • " + date;
+        }
+        else if(mDayManager.isTomorrow(day)) {
+            textView.setTextColor(mDefaultDayColor);
+            date = mTomorrowText.toUpperCase() + " • " + date;
+        }
+        else if(mDayManager.isYesterday(day)) {
+            date = mYesterdayText.toUpperCase() + " • " + date;
+        }
+        textView.setText(date);
     }
 
     @Override
@@ -98,7 +124,7 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
             case NO_EVENT:
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view_no_event, parent, false);
             case HAS_EVENTS:
-                return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view, parent, false);
+                return new DayView(parent.getContext());
         }
         return null;
     }
