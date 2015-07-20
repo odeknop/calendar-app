@@ -63,11 +63,13 @@ public class ApiAsyncEventTask extends AsyncTask<Void, Void, Boolean> {
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
             mLoginFragment.showGooglePlayServicesAvailabilityErrorDialog(
                     availabilityException.getConnectionStatusCode());
+            return false;
 
         } catch (UserRecoverableAuthIOException userRecoverableException) {
             mLoginFragment.startActivityForResult(
                     userRecoverableException.getIntent(),
                     LoginFragment.REQUEST_AUTHORIZATION);
+            return false;
 
         } catch (final Exception e) {
             mError = e;
@@ -84,7 +86,7 @@ public class ApiAsyncEventTask extends AsyncTask<Void, Void, Boolean> {
             mLoginFragment.mStatus.setText("The following error occurred: " +
                     mError.getMessage());
         } else {
-            mLoginFragment.mStatus.setText(success ? mEvents.length + " events imported!" : "No events imported");
+            mLoginFragment.mStatus.setText(success ? mEvents.length + " events imported!" : "No events imported.");
         }
         mLoginFragment.mStatus.setVisibility(View.VISIBLE);
     }

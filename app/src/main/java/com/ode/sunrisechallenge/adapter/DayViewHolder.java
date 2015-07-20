@@ -21,7 +21,7 @@ public class DayViewHolder extends RecyclerView.ViewHolder {
         eventTitle = (TextView) itemView.findViewById(R.id.event_title);
     }
 
-    public void bind(IEvent event) {
-        eventTitle.setText(event.getTitle());
+    public void bind(IEvent[] event) {
+        eventTitle.setText(event[0].getTitle());
     }
 }

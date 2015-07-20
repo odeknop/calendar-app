@@ -48,11 +48,10 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
 
     @Override
     public void onBindViewHolder(DayViewHolder holder, int position) {
-
         IDay day = getItem(position);
         if(holder.getItemViewType() == HAS_EVENTS) {
             IEvent[] events = mEventManager.getEvents(day);
-            holder.bind(events[0]);
+            holder.bind(events);
         }
         holder.itemView.setTag(position);
     }

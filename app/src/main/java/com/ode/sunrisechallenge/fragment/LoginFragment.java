@@ -137,6 +137,7 @@ public class LoginFragment extends Fragment {
                 new ApiAsyncEventTask(this).execute();
             } else {
                 mProgress.setVisibility(View.INVISIBLE);
+                mStatus.setVisibility(View.VISIBLE);
                 mStatus.setText("No network connection available.");
             }
         }
