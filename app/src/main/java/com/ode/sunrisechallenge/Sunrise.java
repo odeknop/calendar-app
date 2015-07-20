@@ -1,7 +1,9 @@
 package com.ode.sunrisechallenge;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Point;
+import android.support.multidex.MultiDex;
 
 import com.ode.sunrisechallenge.model.ITimeRange;
 import com.ode.sunrisechallenge.model.impl.TimeRange;
@@ -29,6 +31,12 @@ public class Sunrise extends Application {
         Point screenSize = DisplayUtils.getScreenDimensions(getApplicationContext());
         ROW_HEIGHT = screenSize.x / DAYS_IN_A_WEEK;
         DBHelper.setApplicationContext(getApplicationContext());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
     }
 
     public static ITimeRange getCalendarRange() {
