@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.ode.sunrisechallenge.R;
 import com.ode.sunrisechallenge.model.IEvent;
 import com.ode.sunrisechallenge.model.utils.TimeUtils;
+import com.ode.sunrisechallenge.model.utils.Utils;
 import com.ode.sunrisechallenge.recycler.RecyclerView;
 import com.ode.sunrisechallenge.view.DayView;
 
@@ -48,7 +49,9 @@ public class DayViewHolder extends RecyclerView.ViewHolder {
         }
 
         public void bind(IEvent event) {
-            eventTitle.setText(event.getTitle());
+            String location = null;
+            if(!Utils.isEmpty(event.getLocation())) location = " @ " + event.getLocation();
+            eventTitle.setText(event.getTitle() + (location == null ? "" : location));
             eventStart.setText(event.getTime().getStartTime().toString("H:mm aa"));
             eventDuration.setText(TimeUtils.getDurationAsString(event.getTime().getDuration()));
         }

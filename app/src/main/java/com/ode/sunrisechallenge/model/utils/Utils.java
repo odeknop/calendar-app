@@ -62,4 +62,9 @@ public class Utils {
             throw new RuntimeException(th);
         }
     }
+
+    public static boolean isEmpty(String string) {
+        if(string == null) return false;
+        return string.length() == 0;
+    }
 }

@@ -23,8 +23,8 @@ public class EventEditor {
                        DateTime startTime, DateTime endTime, IAccount account,
                        long accountType, String accountEventId) {
         mTitle = title;
-        mDescription = description;
-        mLocation = location;
+        mDescription = description == null ? "" : description;
+        mLocation = location == null ? "" : location;
         mStartTime = startTime;
         mEndTime = endTime;
         mAccount = account;
