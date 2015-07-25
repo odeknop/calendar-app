@@ -22,6 +22,8 @@ import com.ode.sunrisechallenge.recycler.RecyclerView;
 import com.ode.sunrisechallenge.recycler.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import com.ode.sunrisechallenge.utils.NavigationUtils;
 
+import org.joda.time.LocalDate;
+
 public class AgendaViewFragment extends Fragment {
 
     public static final String TAG = AgendaViewFragment.class.getName();
@@ -79,6 +81,8 @@ public class AgendaViewFragment extends Fragment {
         mRecyclerView.setAdapter(mAgendaViewAdapter = new AgendaViewAdapter(getActivity(), mAccount.getEventManager()));
         final StickyRecyclerHeadersDecoration headersDecoration = new StickyRecyclerHeadersDecoration(mAgendaViewAdapter);
         mRecyclerView.addItemDecoration(headersDecoration);
+
+        LocalDate lc = new LocalDate();
 
         final Scroller s = mRecyclerView.getScroller();
         final boolean[] extend = {true};

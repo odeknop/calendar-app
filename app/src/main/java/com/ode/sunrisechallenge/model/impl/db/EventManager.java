@@ -13,10 +13,8 @@ import com.ode.sunrisechallenge.model.utils.TimeUtils;
 import com.ode.sunrisechallenge.model.utils.Utils;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by ode on 14/07/15.

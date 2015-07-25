@@ -101,6 +101,11 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
     }
 
     @Override
+    public void onViewRecycled(DayViewHolder holder) {
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public int getItemCount() {
         return mDays.length;
     }
@@ -124,7 +129,7 @@ public class AgendaViewAdapter extends RecyclerView.Adapter<DayViewHolder> imple
             case NO_EVENT:
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view_no_event, parent, false);
             case HAS_EVENTS:
-                return new DayView(parent.getContext());
+                return LayoutInflater.from(parent.getContext()).inflate(R.layout.day_view_container, parent, false);
         }
         return null;
     }

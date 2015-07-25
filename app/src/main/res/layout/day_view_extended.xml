@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="horizontal"
-              android:padding="@dimen/day_view_extended_padding">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:id="@+id/event_time"
@@ -39,9 +35,8 @@
         android:id="@+id/event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="2"
         android:text="It is a long established fact that a reader will be distracted by the readable content"
         android:textColor="#000000"
         android:textSize="@dimen/event_title_font_size"/>
 
-</LinearLayout>
+</merge>
