@@ -16,22 +16,20 @@ import java.util.HashMap;
 /**
  * Created by ode on 26/09/14.
  */
-public class EventListenersUISafe<T>
+class EventListenersUISafe<T>
 {
-	protected final Object mLockobj = new Object();
+	private final Object mLockobj = new Object();
 	private T[] mListeners_ts;
-	int arrayCount;
+	private int arrayCount;
 	private final T mInvoker;
-	private final Class<T> mClass;
-	protected volatile boolean mClosed;
-	protected final ArrayList<T> list = new ArrayList<>();
-	protected Handler handler = new Handler(Looper.getMainLooper());
+	private volatile boolean mClosed;
+	private final ArrayList<T> list = new ArrayList<>();
+	private final Handler handler = new Handler(Looper.getMainLooper());
 
-	HashMap<Method,Method> methods = new HashMap<>();
+	private final HashMap<Method,Method> methods = new HashMap<>();
 
 	public EventListenersUISafe(Class<T> classInfo)
 	{
-		this.mClass = classInfo;
 		this.mInvoker = buildInvoker(classInfo);
 		mListeners_ts = (T[]) Array.newInstance(classInfo, 3);
 	}
@@ -69,7 +67,7 @@ public class EventListenersUISafe<T>
 		return new EventListeners<T>(classInfo);
 	}
 
-	public final void removeAllHandlers()
+	final void removeAllHandlers()
 	{
 		synchronized(mLockobj)
 		{
@@ -78,7 +76,7 @@ public class EventListenersUISafe<T>
 		}
 	}
 
-	public final void removeHandler(T event)
+	private void removeHandler(T event)
 	{
 		synchronized(mLockobj)
 		{
@@ -105,13 +103,13 @@ public class EventListenersUISafe<T>
 		}
 	}
 
-	protected void invokeEventHandling(Method method, final Object[] args)
+	private void invokeEventHandling(Method method, final Object[] args)
 	{
 		_callMethod(method, args);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected final void _callMethod(Method method, final Object[] args)
+	private void _callMethod(Method method, final Object[] args)
 	{
 		Method unique;
 		synchronized(mLockobj)
@@ -140,12 +138,12 @@ public class EventListenersUISafe<T>
 	}
 
 	@SuppressWarnings("unchecked")
-	private final T buildInvoker(Class<T> classInfo)
+	private T buildInvoker(Class<T> classInfo)
 	{
 		return (T) Proxy.newProxyInstance(classInfo.getClassLoader(), new Class[]{classInfo}, createInvocationHandler());
 	}
 
-	private final InvocationHandler createInvocationHandler()
+	private InvocationHandler createInvocationHandler()
 	{
 		return new InvocationHandler()
 		{

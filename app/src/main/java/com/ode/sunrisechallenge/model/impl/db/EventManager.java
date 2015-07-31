@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.ode.sunrisechallenge.Sunrise;
 import com.ode.sunrisechallenge.model.EventEditor;
+import com.ode.sunrisechallenge.model.IAccount;
 import com.ode.sunrisechallenge.model.IDay;
 import com.ode.sunrisechallenge.model.IEvent;
 import com.ode.sunrisechallenge.model.IEventManager;
@@ -21,12 +23,12 @@ import java.util.ArrayList;
  */
 public class EventManager extends Tables implements IEventManager {
 
-    final Account mAccount;
+    final Account account;
     final DBHelper parent;
 
     EventManager(Account account) {
-        mAccount = account;
-        parent = account.dbHelper;
+        this.account = account;
+        this.parent = account.dbHelper;
     }
 
     @Override
@@ -43,11 +45,19 @@ public class EventManager extends Tables implements IEventManager {
     }
 
     @Override
+    public IEvent[] getAllEvents() {
+        ITimeRange range = Sunrise.getCalendarRange();
+        ArrayList<Event> eventList = rawGetEvents(null, range.getStartTime(), range.getEndTime(), true, null, null);
+        if(eventList == null) return IEvent.EMPTY_ARR;
+        return eventList.toArray(IEvent.EMPTY_ARR);
+    }
+
+    @Override
     public boolean hasEvents(IDay day) {
         return getEvents(day).length > 0;
     }
 
-    Event createEvent(EventEditor eventEditor) {
+    private Event createEvent(EventEditor eventEditor) {
 
         Event res = Utils.first(rawGetEvents(eventEditor.getAccountTypeId(), eventEditor.getAccountEventId()));
         if(res != null) return res;
@@ -61,7 +71,7 @@ public class EventManager extends Tables implements IEventManager {
             contentValues.put("EndTime", TimeUtils.toDBTime(eventEditor.getEndTime()));
             contentValues.put("AccountTypeId", eventEditor.getAccountTypeId());
             contentValues.put("AccountEventId", eventEditor.getAccountEventId());
-            contentValues.put("OwnerAccountId", mAccount.id);
+            contentValues.put("OwnerAccountId", account.id);
 
             long id = parent.database.insertWithOnConflict(
                     TABLE_EVENT, null, contentValues,
@@ -142,7 +152,7 @@ public class EventManager extends Tables implements IEventManager {
 
     private void extractEventWhereClause(Long id, DateTime from, DateTime to, boolean exclusive, Long accountTypeId, String accountEventId, StringBuilder sel, ArrayList<String> args) {
         Utils.appendString(sel, "OwnerAccountId = ? ", "AND ");
-        args.add(Long.toString(mAccount.id));
+        args.add(Long.toString(account.id));
 
         if (id != null) {
             Utils.appendString(sel, "EventId = ? ", "AND ");
@@ -175,4 +185,8 @@ public class EventManager extends Tables implements IEventManager {
         }
     }
 
+    @Override
+    public IAccount getOwner() {
+        return account;
+    }
 }

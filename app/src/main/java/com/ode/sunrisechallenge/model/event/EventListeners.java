@@ -169,12 +169,12 @@ public class EventListeners<T>
 	}
 
 	@SuppressWarnings("unchecked")
-	private final T buildInvoker(Class<T> classInfo)
+	private T buildInvoker(Class<T> classInfo)
 	{
 		return (T) Proxy.newProxyInstance(classInfo.getClassLoader(), new Class[]{classInfo}, createInvocationHandler());
 	}
 
-	private final InvocationHandler createInvocationHandler()
+	private InvocationHandler createInvocationHandler()
 	{
 		return new InvocationHandler()
 		{

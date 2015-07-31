@@ -2,6 +2,7 @@ package com.ode.sunrisechallenge.fragment;
 
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -17,15 +18,14 @@ import com.ode.sunrisechallenge.model.utils.TimeUtils;
 import com.ode.sunrisechallenge.utils.NavigationUtils;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by ode on 14/07/15.
  */
-public class ApiAsyncEventTask extends AsyncTask<Void, Void, Boolean> {
+class ApiAsyncEventTask extends AsyncTask<Void, Void, Void> {
 
-    LoginFragment mLoginFragment;
+    private final LoginFragment mLoginFragment;
     private IEvent[] mEvents;
     private Exception mError;
 
@@ -42,7 +42,7 @@ public class ApiAsyncEventTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    protected Void doInBackground(Void... params) {
         mError = null;
         try {
             final List<Event> results = getDataFromApi();
@@ -63,32 +63,40 @@ public class ApiAsyncEventTask extends AsyncTask<Void, Void, Boolean> {
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
             mLoginFragment.showGooglePlayServicesAvailabilityErrorDialog(
                     availabilityException.getConnectionStatusCode());
-            return false;
+            mError = availabilityException;
 
         } catch (UserRecoverableAuthIOException userRecoverableException) {
             mLoginFragment.startActivityForResult(
                     userRecoverableException.getIntent(),
                     LoginFragment.REQUEST_AUTHORIZATION);
-            return false;
+            mError = userRecoverableException;
 
         } catch (final Exception e) {
             mError = e;
-            return false;
         }
-        return mEvents.length > 0;
+        return null;
     }
 
     @Override
-    protected void onPostExecute(Boolean success) {
-        super.onPostExecute(success);
-        mLoginFragment.mProgress.setVisibility(View.INVISIBLE);
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
         if(mError != null) {
-            mLoginFragment.mStatus.setText("The following error occurred: " +
-                    mError.getMessage());
+            if(mError instanceof UserRecoverableAuthIOException) {
+                mLoginFragment.currentTask = null;
+                return;
+            }
+            mLoginFragment.mStatus.setText("The following error occurred: \n\n" + mError.getMessage());
+            mLoginFragment.mStatus.setVisibility(View.VISIBLE);
         } else {
-            mLoginFragment.mStatus.setText(success ? mEvents.length + " events imported!" : "No events imported.");
+            mLoginFragment.mStatus.setText("Events successfully imported!");
+            Toast.makeText(mLoginFragment.getActivity(),
+                    mEvents.length > 0 ? mEvents.length + " events imported!" : "No events imported.",
+                    Toast.LENGTH_SHORT).show();
+            mLoginFragment.startActivity(NavigationUtils.navigateToMainView(mLoginFragment.getActivity(), mLoginFragment.account));
         }
-        mLoginFragment.mStatus.setVisibility(View.VISIBLE);
+        mLoginFragment.mProgress.setVisibility(View.INVISIBLE);
+        mLoginFragment.currentTask = null;
     }
 
     private List<Event> getDataFromApi() throws IOException {

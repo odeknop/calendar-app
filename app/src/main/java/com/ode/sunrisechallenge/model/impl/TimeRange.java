@@ -25,8 +25,7 @@ public class TimeRange implements ITimeRange {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof ITimeRange) return super.equals(o);
-        return false;
+        return o instanceof ITimeRange && super.equals(o);
     }
 
     @Override

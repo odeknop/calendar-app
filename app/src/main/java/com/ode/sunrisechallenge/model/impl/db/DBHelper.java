@@ -1,16 +1,10 @@
 package com.ode.sunrisechallenge.model.impl.db;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.ode.sunrisechallenge.model.IAccount;
 import com.ode.sunrisechallenge.model.IData;
@@ -18,11 +12,7 @@ import com.ode.sunrisechallenge.model.utils.Utils;
 import com.ode.sunrisechallenge.model.utils.WeakSortedList;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import gnu.trove.map.hash.THashMap;
@@ -81,7 +71,7 @@ public class DBHelper extends Tables implements IData {
         return mCachedItems;
     }
 
-    <T extends DBObject> void nl_removeItem(T remove, Class<T> tClass) {
+    private <T extends DBObject> void nl_removeItem(T remove, Class<T> tClass) {
         WeakSortedList<T> res = (WeakSortedList<T>) mCachedItems.get(tClass);
         if (res != null) res.remove(remove.getComparableValue());
     }
@@ -157,7 +147,7 @@ public class DBHelper extends Tables implements IData {
         database.close();
     }
 
-    public static void deleteDatabase(Context context) throws IOException {
+    private static void deleteDatabase(Context context) throws IOException {
         File path = context.getDatabasePath(DATABASE_NAME);
         if (path.exists() && !path.delete()) throw new IOException("Cannot delete database " + DATABASE_NAME);
     }
@@ -167,7 +157,7 @@ public class DBHelper extends Tables implements IData {
         ArrayList<String> args = null;
 
         if (id != null && id > 0) {
-            Utils.appendString(selection, "[AccountId] = ?", " AND");
+            selection = Utils.appendString(selection, "[AccountId] = ?", " AND");
             (args = Utils.useOrCreate(args, ArrayList.class)).add(id.toString());
         }
         if (name != null) {
@@ -300,4 +290,16 @@ public class DBHelper extends Tables implements IData {
                             ");"
             }
     };
+
+    public static IData debugRemoveDBAndResetInstance() throws IOException {
+        synchronized (mLock) {
+            if (mData != null) {
+                IData tmp = mData;
+                mData = null;
+                tmp.close();
+            }
+            deleteDatabase(mContext);
+            return getInstance();
+        }
+    }
 }

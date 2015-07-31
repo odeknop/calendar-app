@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/day_view_extended_header_height"
+    android:gravity="center_vertical"
+    android:background="@drawable/day_view_extended_header_background"
+    android:paddingLeft="@dimen/day_view_extended_padding"
+    android:paddingRight="@dimen/day_view_extended_padding"
+    android:text="@string/hello_world"
+    android:textAllCaps="true"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textColor="@color/day_view_extended_header_text"
+    android:id="@+id/header_text"/>

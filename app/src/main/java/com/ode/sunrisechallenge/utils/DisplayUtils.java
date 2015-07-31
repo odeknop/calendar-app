@@ -35,7 +35,6 @@ public class DisplayUtils {
     }
 
     public static float pxToDp(Context context, int px) {
-        float pixel = px;
-        return (pixel / getDisplayMetrics(context).density);
+        return ((float) px / getDisplayMetrics(context).density);
     }
 }

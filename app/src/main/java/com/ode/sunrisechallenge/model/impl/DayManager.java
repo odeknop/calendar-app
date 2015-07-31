@@ -8,9 +8,7 @@ import com.ode.sunrisechallenge.model.ITimeRange;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.DurationFieldType;
-import org.joda.time.LocalDate;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 

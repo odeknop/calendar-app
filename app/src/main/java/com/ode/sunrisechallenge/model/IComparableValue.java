@@ -5,5 +5,5 @@ package com.ode.sunrisechallenge.model;
  */
 public interface IComparableValue {
 
-    public long getComparableValue();
+    long getComparableValue();
 }

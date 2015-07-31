@@ -9,11 +9,11 @@ public class RowContent {
 
     long id;
 
-    protected RowContent() {
+    RowContent() {
 
     }
 
-    protected void setFromCursor(DBHelper parent, Cursor cursor) {
+    void setFromCursor(DBHelper parent, Cursor cursor) {
         this.id = cursor.getLong(0);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Utils {
 
-    public static final String TAG = Utils.class.getName();
+    private static final String TAG = Utils.class.getName();
     public static final String[] EMPTY_STRING_ARR = new String[]{};
 
     public static <T> T first(List<T> list) {
@@ -18,10 +18,12 @@ public class Utils {
         return list.get(0);
     }
 
-    public static StringBuilder appendString(StringBuilder source, String add, String delim) {
-        if (source == null) source = new StringBuilder();
-        else if (source.length() != 0) source.append(delim);
-        return source.append(add);
+    public static StringBuilder appendString(StringBuilder source, String toAdd, String delim) {
+        if (source == null)
+            source = new StringBuilder();
+        else if (source.length() != 0)
+            source.append(delim);
+        return source.append(toAdd);
     }
 
     public static <T> T useOrCreate(T t, Class<T> tClass) {
@@ -64,7 +66,6 @@ public class Utils {
     }
 
     public static boolean isEmpty(String string) {
-        if(string == null) return false;
-        return string.length() == 0;
+        return string != null && string.length() == 0;
     }
 }

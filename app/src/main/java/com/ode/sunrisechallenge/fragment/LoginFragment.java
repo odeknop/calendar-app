@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,21 +49,20 @@ import java.util.Arrays;
 public class LoginFragment extends Fragment {
 
     com.google.api.services.calendar.Calendar service;
-    GoogleAccountCredential credential;
+    private GoogleAccountCredential credential;
     IAccount account;
+    ApiAsyncEventTask currentTask;
 
-    final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-    final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+    private final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+    private final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
     public static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    private static final String PREF_ACCOUNT_NAME = "accountName";
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
 
     public TextView mStatus;
     public ProgressBar mProgress;
-    public Button mOpen;
 
     public LoginFragment() {
     }
@@ -74,22 +71,22 @@ public class LoginFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
+        if(getArguments() != null ) {
+            if(getArguments().getBoolean(NavigationUtils.LOGOUT)) {
+                account = null;
+            }
+        }
     }
 
     private void init() {
-        SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
         credential = GoogleAccountCredential.usingOAuth2(
                 getActivity(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff())
-                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
+                .setBackOff(new ExponentialBackOff());
 
         service = new com.google.api.services.calendar.Calendar.Builder(
                 transport, jsonFactory, credential)
                 .setApplicationName("SunriseChallenge")
                 .build();
-
-        Account account = credential.getSelectedAccount();
-        if(account != null) this.account = DBHelper.getInstance().getAccount(account.name);
     }
 
     @Nullable
@@ -101,44 +98,39 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mStatus = (TextView) view.findViewById(R.id.status);
+        mProgress = (ProgressBar) view.findViewById(R.id.progress);
+        mStatus.setVisibility(View.INVISIBLE);
+
         view.findViewById(R.id.btn_connect_with_google).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 importData();
             }
         });
-        mStatus = (TextView) view.findViewById(R.id.status);
-        mStatus.setVisibility(View.INVISIBLE);
-        mProgress = (ProgressBar) view.findViewById(R.id.progress);
-        mOpen = (Button) view.findViewById(R.id.open);
+
         view.findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ExportDatabaseFileTask().execute();
             }
         });
-        mOpen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(account == null) Toast.makeText(getActivity(), "Please connect with Google first.", Toast.LENGTH_LONG).show();
-                else getActivity().startActivity(NavigationUtils.navigateToMainView(getActivity(), account));
-            }
-        });
     }
 
     private void importData() {
-
+        if (currentTask != null) return;
         Account account = credential.getSelectedAccount();
-        if(account == null) {
+        if (account == null) {
             chooseAccount();
         } else {
-            this.account = DBHelper.getInstance().getAccount(account.name);
             if (isDeviceOnline()) {
-                new ApiAsyncEventTask(this).execute();
+                currentTask = new ApiAsyncEventTask(this);
+                currentTask.execute();
             } else {
-                mProgress.setVisibility(View.INVISIBLE);
-                mStatus.setVisibility(View.VISIBLE);
-                mStatus.setText("No network connection available.");
+                int count = this.account.getEventManager().getAllEvents().length;
+                startActivity(NavigationUtils.navigateToMainView(getActivity(), this.account));
+                Toast.makeText(getActivity(), "You have " + count + " event"+ (count > 0 ? "s" : "") + " offline", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -153,21 +145,15 @@ public class LoginFragment extends Fragment {
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == Activity.RESULT_OK && data != null &&
-                        data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                if (resultCode == Activity.RESULT_OK && data != null && data.getExtras() != null) {
+                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         credential.setSelectedAccountName(accountName);
-                        account = DBHelper.getInstance().createAccount(accountName);
-                        SharedPreferences settings =
-                                getActivity().getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.commit();
+                        this.account = DBHelper.getInstance().createAccount(accountName);
                         importData();
                     }
                 } else if (resultCode == Activity.RESULT_CANCELED) {
+                    mProgress.setVisibility(View.INVISIBLE);
                     mStatus.setText("Account unspecified.");
                     mStatus.setVisibility(View.VISIBLE);
                 }
@@ -175,6 +161,8 @@ public class LoginFragment extends Fragment {
             case REQUEST_AUTHORIZATION:
                 if (resultCode != Activity.RESULT_OK) {
                     chooseAccount();
+                } else {
+                    importData();
                 }
                 break;
         }
@@ -253,7 +241,7 @@ public class LoginFragment extends Fragment {
 
         protected Boolean doInBackground(final String... args) {
 
-            File dbFile = new File(Environment.getDataDirectory() + "/data/"+ getActivity().getApplicationInfo().packageName +"/databases/" + DBHelper.DATABASE_NAME);
+            File dbFile = new File(Environment.getDataDirectory() + "/data/" + getActivity().getApplicationInfo().packageName + "/databases/" + DBHelper.DATABASE_NAME);
             File exportDir = new File(Environment.getExternalStorageDirectory(), "");
             if (!exportDir.exists()) {
                 exportDir.mkdirs();

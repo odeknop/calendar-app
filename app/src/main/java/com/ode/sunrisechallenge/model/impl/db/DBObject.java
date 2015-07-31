@@ -12,18 +12,18 @@ import com.ode.sunrisechallenge.model.utils.Utils;
 class DBObject<T extends RowContent> implements IComparableValue {
 
     final long id;
-    protected final DBHelper dbHelper;
-    final Class<T> tClass;
-    protected boolean deleted;
+    final DBHelper dbHelper;
+    private final Class<T> tClass;
+    private boolean deleted;
 
     private volatile T mRef;
 
     public interface IActivator<T>
     {
-        public T newInstance(Class<T> tClass, DBHelper dbHelper, Cursor cursor);
+        T newInstance(Class<T> tClass, DBHelper dbHelper, Cursor cursor);
     }
 
-    protected DBObject(Class<T> tClass, DBHelper parent, Cursor cursor) {
+    DBObject(Class<T> tClass, DBHelper parent, Cursor cursor) {
         this.dbHelper = parent;
         this.tClass = tClass;
         T res = setFromCursor(cursor);
@@ -31,7 +31,7 @@ class DBObject<T extends RowContent> implements IComparableValue {
         this.id = res.id;
     }
 
-    protected final T setFromCursor(Cursor cursor) {
+    final T setFromCursor(Cursor cursor) {
         checkDisposed();
         T res = null;
         try {
@@ -44,14 +44,14 @@ class DBObject<T extends RowContent> implements IComparableValue {
         return res;
     }
 
-    protected final void checkDisposed() {
+    private void checkDisposed() {
         if(deleted)
             throw new RuntimeException("Object is disposed");
         if(dbHelper.disposed)
             throw new RuntimeException("CoreData is disposed");
     }
 
-    protected void setNewRef(T t) {
+    void setNewRef(T t) {
         if(t == null)
             deleted = true;
         else if(!deleted)
@@ -69,7 +69,7 @@ class DBObject<T extends RowContent> implements IComparableValue {
         return ref != null && ref.id > 0;
     }
 
-    protected final T row() {
+    final T row() {
         return row(true);
     }
 

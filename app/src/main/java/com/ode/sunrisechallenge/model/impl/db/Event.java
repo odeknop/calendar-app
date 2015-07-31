@@ -1,6 +1,7 @@
 package com.ode.sunrisechallenge.model.impl.db;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.ode.sunrisechallenge.model.IAccount;
 import com.ode.sunrisechallenge.model.IEvent;
@@ -52,7 +53,7 @@ public class Event extends DBObject<Event.EventRow> implements IEvent {
 
     protected Event(EventManager eventManager, Cursor cursor) {
         super(EventRow.class, eventManager.parent, cursor);
-        mAccount = eventManager.mAccount;
+        mAccount = eventManager.account;
     }
 
     @Override
@@ -68,11 +69,6 @@ public class Event extends DBObject<Event.EventRow> implements IEvent {
     @Override
     public String getDescription() {
         return row().description;
-    }
-
-    @Override
-    public boolean isAllDayEvent() {
-        return false; //TODO to implement
     }
 
     @Override
@@ -101,7 +97,7 @@ public class Event extends DBObject<Event.EventRow> implements IEvent {
     }
 
     @Override
-    public int compareTo(IEvent another) {
+    public int compareTo(@NonNull IEvent another) {
         if(this == another) return 0;
         int res = getTime().compareTo(another.getTime());
         if(res == 0) res = getId() < another.getId() ? -1 : 1;

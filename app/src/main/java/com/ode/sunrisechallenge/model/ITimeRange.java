@@ -1,7 +1,5 @@
 package com.ode.sunrisechallenge.model;
 
-import android.os.Parcelable;
-
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 

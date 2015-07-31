@@ -11,14 +11,13 @@ import com.ode.sunrisechallenge.model.impl.db.DBHelper;
 import com.ode.sunrisechallenge.utils.DisplayUtils;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 /**
  * Created by ode on 01/07/15.
  */
 public class Sunrise extends Application {
 
-    public final static int DAYS_IN_A_WEEK = 7;
+    private final static int DAYS_IN_A_WEEK = 7;
     public static int ROW_HEIGHT;
 
     private final static DateTime startTime = DateTime.now().minusMonths(3);

@@ -8,7 +8,6 @@ public interface IEvent extends Comparable<IEvent> {
     long getId();
     String getTitle();
     String getDescription();
-    boolean isAllDayEvent();
     ITimeRange getTime();
     String getLocation();
     IEvent[] EMPTY_ARR = new IEvent[0];

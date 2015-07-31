@@ -57,14 +57,14 @@ public class TimeUtils {
                 && timeRange.getEndTime().equals(otherTimeRange.getEndTime());
     }
 
-    public static DateTime combine(LocalDate date, LocalTime time) {
+    private static DateTime combine(LocalDate date, LocalTime time) {
         return new DateTime(
                 date.getYear(), date.getMonthOfYear(), date.getDayOfMonth(),
                 time.getHourOfDay(), time.getMinuteOfHour()
         ).toDateTime(DateTimeZone.UTC);
     }
 
-    public static ITimeRange startOfDayRange(LocalDate dt) {
+    private static ITimeRange startOfDayRange(LocalDate dt) {
         DateTime from = combine(dt, mStartTime);
         DateTime to = combine(dt.plusDays(1), mStartTime);
         return new TimeRange(from, to);
