@@ -15,6 +15,7 @@ import com.ode.sunrisechallenge.model.utils.TimeUtils;
 import com.ode.sunrisechallenge.model.utils.Utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 
@@ -188,5 +189,25 @@ public class EventManager extends Tables implements IEventManager {
     @Override
     public IAccount getOwner() {
         return account;
+    }
+
+    public static IEvent getOnGoingEvent(IEvent[] events) {
+        ArrayList<IEvent> curEv = new ArrayList<>();
+        for(IEvent event : events) {
+            if(TimeUtils.isNow(event))
+                curEv.add(event);
+        }
+        if(curEv.size() == 1)
+            return curEv.get(0);
+        if(curEv.size() == 0) {
+            for(IEvent event : events) {
+                if(event.getTime().getStartTime().toLocalDate().equals(LocalDate.now())
+                        && event.getTime().getStartTime().isAfterNow()) {
+                    return event;
+                }
+            }
+            return null;
+        }
+        return curEv.get(curEv.size() - 1);
     }
 }

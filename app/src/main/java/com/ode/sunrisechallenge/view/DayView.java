@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ode.sunrisechallenge.R;
+import com.ode.sunrisechallenge.view.drawable.NowDrawable;
 
 /**
  * Created by ode on 25/07/15.
@@ -27,7 +28,7 @@ public class DayView extends LinearLayout {
     }
 
     public DayView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, R.attr.dayViewStyle);
+        super(context, attrs, defStyleAttr);
 
         inflate(getContext(), R.layout.agenda_day_view, this);
 
@@ -37,6 +38,8 @@ public class DayView extends LinearLayout {
         mIconHeight = getResources().getDimensionPixelSize(R.dimen.day_view_icon_size);
 
         initLayoutParams();
+
+        setBackgroundDrawable(getResources().getDrawable(R.drawable.agenda_day_view_background));
     }
 
     private void initLayoutParams() {
@@ -52,7 +55,7 @@ public class DayView extends LinearLayout {
         mEventTitle.setLayoutParams(p2);
 
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 10, 0, 10);
         setLayoutParams(layoutParams);
+        setOrientation(LinearLayout.VERTICAL);
     }
 }

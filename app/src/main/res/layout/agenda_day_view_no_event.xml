@@ -4,7 +4,7 @@
               android:layout_height="wrap_content"
               android:background="@android:color/white"
               android:gravity="center_vertical"
-              android:minHeight="@dimen/day_view_extended_min_height"
+              android:minHeight="@dimen/day_view_min_height"
               android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         android:text="@string/no_event"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/day_view_extended_header_text"
-        android:padding="@dimen/day_view_extended_padding"
+        android:padding="@dimen/day_view_padding"
         android:id="@+id/no_event"/>
 
 </LinearLayout>

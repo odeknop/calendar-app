@@ -11,8 +11,6 @@
 
         <item name="buttonStyle">@style/buttonStyle</item>
         <item name="actionMenuTextColor">@color/primary</item>
-        
-        <item name="dayViewStyle">@style/DayViewStyle</item>
 
     </style>
 
@@ -24,10 +22,6 @@
         <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="android:background">@color/primary</item>
-    </style>
-
-    <style name="DayViewStyle">
-        <item name="android:padding">@dimen/day_view_extended_padding</item>
     </style>
 
 </resources>

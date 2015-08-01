@@ -28,4 +28,7 @@
 
     <color name="current_day_highlight">#2789e4</color>
 
+    <color name="triangle">#ff5850</color>
+    <color name="soon">#fd4952</color>
+    <color name="event_divider">#e3e3e3</color>
 </resources>

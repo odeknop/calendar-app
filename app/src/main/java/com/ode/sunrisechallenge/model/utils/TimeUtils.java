@@ -3,6 +3,7 @@ package com.ode.sunrisechallenge.model.utils;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.ode.sunrisechallenge.model.IDay;
+import com.ode.sunrisechallenge.model.IEvent;
 import com.ode.sunrisechallenge.model.ITimeRange;
 import com.ode.sunrisechallenge.model.impl.TimeRange;
 
@@ -12,6 +13,8 @@ import org.joda.time.Duration;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
@@ -22,6 +25,8 @@ public class TimeUtils {
 
     private static final LocalTime mStartTime = new LocalTime(0, 0); //00H00 AM
     private static final LocalTime mEndTime = new LocalTime(23, 0); //24H00 AM
+
+    public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormat.forPattern("HH:mm aa").withZone(DateTimeZone.getDefault());
 
     private static final PeriodFormatter mPeriodFormatter = new PeriodFormatterBuilder()
             .appendDays()
@@ -86,5 +91,14 @@ public class TimeUtils {
     public static String getDurationAsString(Duration duration) {
         Period p = duration.toPeriod();
         return p.toString(mPeriodFormatter);
+    }
+
+    public static boolean isNow(IEvent event) {
+        return event.getTime().getStartTime().isBeforeNow() && event.getTime().getEndTime().isAfterNow();
+    }
+
+    public static boolean isLessThanAnHourFromNow(IEvent event) {
+        DateTime dateTime = event.getTime().getStartTime();
+        return dateTime.isAfterNow() && dateTime.isBefore(DateTime.now().plusHours(1));
     }
 }
