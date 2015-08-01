@@ -65,7 +65,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<DayViewHolder> implement
         switch (type) {
             case Default: {
                 IEvent[] events = mEventManager.getEvents(day);
-                holder.bind(events);
+                holder.bind(events, day);
             }
         }
     }

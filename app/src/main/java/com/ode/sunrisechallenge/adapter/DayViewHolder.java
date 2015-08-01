@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ode.sunrisechallenge.R;
+import com.ode.sunrisechallenge.model.IDay;
 import com.ode.sunrisechallenge.model.IEvent;
 import com.ode.sunrisechallenge.model.impl.db.EventManager;
 import com.ode.sunrisechallenge.model.utils.TimeUtils;
@@ -33,11 +34,11 @@ public class DayViewHolder extends RecyclerView.ViewHolder {
         noEvent = (TextView) itemView.findViewById(R.id.no_event);
     }
 
-    public void bind(IEvent[] events) {
+    public void bind(IEvent[] events, IDay day) {
         LinearLayout container = (LinearLayout) itemView;
         container.removeAllViews();
         Arrays.sort(events);
-        currentEvent = EventManager.getOnGoingEvent(events);
+        currentEvent = EventManager.getOnGoingEvent(events, day);
 
         for(int i = 0; i < events.length; i++) {
             DayView view = new DayView(mItemView.getContext());

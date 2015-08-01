@@ -15,9 +15,11 @@ import com.ode.sunrisechallenge.model.utils.TimeUtils;
 import com.ode.sunrisechallenge.model.utils.Utils;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 /**
  * Created by ode on 14/07/15.
@@ -191,18 +193,16 @@ public class EventManager extends Tables implements IEventManager {
         return account;
     }
 
-    public static IEvent getOnGoingEvent(IEvent[] events) {
+    public static IEvent getOnGoingEvent(IEvent[] events, IDay day) {
+        if(!day.isToday()) return null;
         ArrayList<IEvent> curEv = new ArrayList<>();
         for(IEvent event : events) {
             if(TimeUtils.isNow(event))
                 curEv.add(event);
         }
-        if(curEv.size() == 1)
-            return curEv.get(0);
         if(curEv.size() == 0) {
             for(IEvent event : events) {
-                if(event.getTime().getStartTime().toLocalDate().equals(LocalDate.now())
-                        && event.getTime().getStartTime().isAfterNow()) {
+                if(event.getTime().getStartTime().isAfterNow()) {
                     return event;
                 }
             }
