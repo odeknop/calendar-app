@@ -19,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
         if(getIntent() != null) {
             mAccount = getIntent().getParcelableExtra(NavigationUtils.USER_PROFILE);
         }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(android.R.id.content, MainFragment.newInstance(mAccount), MainFragment.TAG)
-                .commit();
+        if(savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(android.R.id.content, MainFragment.newInstance(mAccount), MainFragment.TAG)
+                    .commit();
+        }
     }
 }
