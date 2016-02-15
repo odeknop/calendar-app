@@ -31,7 +31,7 @@ dependencies {
     compile 'net.sf.trove4j:trove4j:3.0.3'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'joda-time:joda-time:2.3'
+    compile 'joda-time:joda-time:2.8.2'
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.1@aar'
     compile 'com.google.android.gms:play-services:7.5.0'
     compile 'com.google.api-client:google-api-client:1.20.0'
